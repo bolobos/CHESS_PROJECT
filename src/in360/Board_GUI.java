@@ -152,8 +152,8 @@ public class Board_GUI {
                     if (selected_piece != null) {
                         int valid = selected_piece.isValid(selected_piece, chess.chess_state, x, y);
 
-                        if(selected_piece.color != chess.turn){
-                            valid=0;
+                        if (selected_piece.color != chess.turn) {
+                            valid = 0;
                         }
 
                         if (valid > 0) {
@@ -201,6 +201,15 @@ public class Board_GUI {
                 case Chess.states.GAME:
 
                     g.drawImage(boardImage, 0, 0, this);
+
+                    if (chess.turn == Piece.ColorP.BLACK){
+                        g.setColor(Color.BLACK);
+                    } else {
+                        g.setColor(Color.WHITE);
+                    }
+
+                    g.fillRect(50 + 800, 50 + 350, 50, 100);
+
                     // Draw all pieces
                     for (int i = 0; i < 8; i++) {
                         for (int j = 0; j < 8; j++) {
