@@ -1,19 +1,22 @@
 package in360;
 
+import in360.Piece.ColorP;
 import in360.pieces.*;
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class Chess {
 
 	// Create 8x8
-	private int[][] chess_state = new int[8][8];
-
-	// Create array list whith all the pieces
-	private List<Piece> pieces = new ArrayList<>();
+	protected Piece[][] chess_state = new Piece[8][8];
 
 	private Board_GUI board;
+
+	public enum states {
+		INIT, GAME, END
+	}
+
+	protected states state_game;
+
+	protected Piece.ColorP turn;
 
 	public static void main(String[] args) {
 
@@ -40,6 +43,9 @@ public class Chess {
 		// }
 		// }
 
+		state_game = states.GAME;
+		turn = Piece.ColorP.WHITE;
+
 		Piece.ColorP color = Piece.ColorP.BLACK;
 
 		for (int i = 0; i < 2; i++) {
@@ -48,104 +54,39 @@ public class Chess {
 				color = Piece.ColorP.WHITE;
 			}
 
-			pieces.add(new Rook(0, 7 * i, color));
-			pieces.add(new Rook(7, 7 * i, color));
-			pieces.add(new Knight(1, 7 * i, color));
-			pieces.add(new Knight(6, 7 * i, color));
-			pieces.add(new Bishop(2, 7 * i, color));
-			pieces.add(new Bishop(5, 7 * i, color));
-			pieces.add(new Queen(4, 7 * i, color));
-			pieces.add(new King(3, 7 * i, color));
+			chess_state[0][7 * i] = new Rook(0, 7 * i, color);
+			chess_state[7][7 * i] = new Rook(7, 7 * i, color);
+			chess_state[1][7 * i] = new Knight(1, 7 * i, color);
+			chess_state[6][7 * i] = new Knight(6, 7 * i, color);
+			chess_state[2][7 * i] = new Bishop(2, 7 * i, color);
+			chess_state[5][7 * i] = new Bishop(5, 7 * i, color);
+			chess_state[4][7 * i] = new Queen(4, 7 * i, color);
+			chess_state[3][7 * i] = new King(3, 7 * i, color);
 
 			for (int j = 0; j <= 7; j++) {
-				pieces.add(new Pawn(j, 1 + 5 * i, color));
+				chess_state[j][1 + 5 * i] = new Pawn(j, 1 + 5 * i, color);
 			}
-		}
-
-		for (Piece piece : pieces) {
-			int x = piece.getX();
-			int y = piece.getY();
-
-			if ((x <= 7) && (x >= 0) && (y <= 7) && (y >= 0)) {
-
-				// if (piece instanceof Bishop) {
-				// Bishop bishop = (Bishop) piece;
-				// piece_int=piece.getPiece_int();
-
-				// } else if (piece instanceof Rook) {
-				// Rook rook = (Rook) piece;
-				// piece_int=piece.getPiece_int();
-
-				// } else if (piece instanceof Knight) {
-				// Knight knight = (Knight) piece;
-				// piece_int=piece.getPiece_int();
-
-				// } else if (piece instanceof Queen) {
-				// Queen queen = (Queen) piece;
-				// piece_int=piece.getPiece_int();
-
-				// } else if (piece instanceof King) {
-				// King king = (King) piece;
-				// piece_int=piece.getPiece_int();
-
-				// } else if (piece instanceof Pawn) {
-				// Pawn pawn = (Pawn) piece;
-				// piece_int=piece.getPiece_int();
-
-				// } else {
-				// chess_state[x][y] = ' ';
-				// }
-
-				chess_state[x][y] = piece.getPiece_int();
-			}
-
 		}
 
 		for (int row = 7; row >= 0; row--) {
 			System.out.print((row + 1) + "|");
 			for (int col = 0; col < 8; col++) {
-				if (chess_state[col][row] == 0) {
+				if (chess_state[col][row] == null) {
 					System.out.print((empty()) + "|");
 				} else {
-					System.out.print(show(chess_state[col][row]) + "|");
+					System.out.print(show(chess_state[col][row].piece_int) + "|");
 				}
 
 			}
 			System.out.println();
 		}
 		System.out.println("  A B C D E F G H");
-
-		/*
-		 * System.out.println("8|"+show(ROOK_BLACK)+"|"+show(KNIGHT_BLACK)+"|"+show(
-		 * BISHOP_BLACK)+"|"+show(QUEEN_BLACK)+"|"+show(KING_BLACK)+"|"+show(
-		 * BISHOP_BLACK)+"|"+show(KNIGHT_BLACK)+"|"+show(ROOK_BLACK)+"|");
-		 * System.out.println("7|"+show(PAWN_BLACK)+"|"+show(PAWN_BLACK)+"|"+show(
-		 * PAWN_BLACK)+"|"+show(PAWN_BLACK)+"|"+show(PAWN_BLACK)+"|"+show(PAWN_BLACK)+
-		 * "|"+show(PAWN_BLACK)+"|"+show(PAWN_BLACK)+"|");
-		 * System.out.println("6|"+empty()+"|"+empty()+"|"+empty()+"|"+empty()+"|"+empty
-		 * ()+"|"+empty()+"|"+empty()+"|"+empty()+"|");
-		 * System.out.println("5|"+empty()+"|"+empty()+"|"+empty()+"|"+empty()+"|"+empty
-		 * ()+"|"+empty()+"|"+empty()+"|"+empty()+"|");
-		 * System.out.println("4|"+empty()+"|"+empty()+"|"+empty()+"|"+empty()+"|"+empty
-		 * ()+"|"+empty()+"|"+empty()+"|"+empty()+"|");
-		 * System.out.println("3|"+empty()+"|"+empty()+"|"+empty()+"|"+empty()+"|"+empty
-		 * ()+"|"+empty()+"|"+empty()+"|"+empty()+"|");
-		 * System.out.println("2|"+show(PAWN_WHITE)+"|"+show(PAWN_WHITE)+"|"+show(
-		 * PAWN_WHITE)+"|"+show(PAWN_WHITE)+"|"+show(PAWN_WHITE)+"|"+show(PAWN_WHITE)+
-		 * "|"+show(PAWN_WHITE)+"|"+show(PAWN_WHITE)+"|");
-		 * System.out.println("1|"+show(ROOK_WHITE)+"|"+show(KNIGHT_WHITE)+"|"+show(
-		 * BISHOP_WHITE)+"|"+show(QUEEN_WHITE)+"|"+show(KING_WHITE)+"|"+show(
-		 * BISHOP_WHITE)+"|"+show(KNIGHT_WHITE)+"|"+show(ROOK_WHITE)+"|");
-		 * System.out.println("  A B C D E F G H");
-		 */
-
 	}
 
-	private void graphic(){
-		
+	private void graphic() {
+
 		// Creation of new window
 		board = new Board_GUI(this);
-
 
 	}
 
@@ -157,14 +98,40 @@ public class Chess {
 		return new String(Character.toChars(piece));
 	}
 
-	public List<Piece> getPieces() {
-		return pieces;
+	public Piece.ColorP isEnd() {
+		Piece.ColorP winner = null;
+		boolean blackWin = true;
+		boolean whiteWin = true;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (chess_state[i][j] != null) {
+					if (chess_state[i][j].color == Piece.ColorP.BLACK) {
+						whiteWin = false;
+					}
+					if (chess_state[i][j].color == Piece.ColorP.WHITE) {
+						blackWin = false;
+					}
+				}
+			}
+		}
+		if (blackWin) {
+			winner = Piece.ColorP.BLACK;
+		}
+		if (whiteWin) {
+			winner = Piece.ColorP.WHITE;
+		}
+
+		return winner;
 	}
 
-	public void setPieces(List<Piece> pieces) {
-		this.pieces = pieces;
+	public states getState_game() {
+		return state_game;
 	}
+
+	public void setState_game(states state_game) {
+		this.state_game = state_game;
+	}
+
 
 	
-
 }
