@@ -18,6 +18,9 @@ public class Chess {
 
 	protected Piece.ColorP turn;
 
+	protected boolean chessBlack = false;
+	protected boolean chessWhite = false;
+
 	public static void main(String[] args) {
 
 		Chess chess = new Chess();
@@ -124,6 +127,33 @@ public class Chess {
 		return winner;
 	}
 
+	public Piece.ColorP isChess() {
+
+		Piece.ColorP res = null;
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (chess_state[i][j] != null) {
+					res = chess_state[i][j].isThreatedKing(chess_state);
+					if (res != null) {
+						return res;
+					}
+
+				}
+			}
+		}
+
+		return res;
+	}
+
+	public Piece.ColorP isChess(Piece selected_piece) {
+		Piece.ColorP res = null;
+
+		for (int i = 0; i < 7; i++) {
+
+		}
+		return res;
+	}
+
 	public states getState_game() {
 		return state_game;
 	}
@@ -132,6 +162,20 @@ public class Chess {
 		this.state_game = state_game;
 	}
 
+	public boolean isChessBlack() {
+		return chessBlack;
+	}
 
-	
+	public void setChessBlack(boolean chessBlack) {
+		this.chessBlack = chessBlack;
+	}
+
+	public boolean isChessWhite() {
+		return chessWhite;
+	}
+
+	public void setChessWhite(boolean chessWhite) {
+		this.chessWhite = chessWhite;
+	}
+
 }

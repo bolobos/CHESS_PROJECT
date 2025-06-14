@@ -66,6 +66,39 @@ public class Pawn extends Piece {
         return res;
     }
 
+    @Override
+    public Piece.ColorP threatedKing(Piece[][] board) {
+
+        Piece.ColorP res = null;
+        if (this.color == Piece.ColorP.BLACK) {
+            if (((x + 1) < 8) && ((y + 1) < 8) && ((x + 1) >= 0) && ((y + 1) >= 0)) {
+                if ((board[x + 1][y + 1] instanceof King) && (board[x + 1][y + 1].getColor() != this.color)) {
+                    res = board[x + 1][y + 1].getColor();
+                }
+            }
+            if (((x - 1) < 8) && ((y + 1) < 8) && ((x - 1) >= 0) && ((y + 1) >= 0)) {
+                if (board[x - 1][y + 1] instanceof King && (board[x - 1][y + 1].getColor() != this.color)) {
+                    res = board[x - 1][y + 1].getColor();
+                }
+            }
+
+        } else {
+
+            if (((x + 1) < 8) && ((y - 1) < 8) && ((x + 1) >= 0) && ((y - 1) >= 0)) {
+                if ((board[x + 1][y - 1] instanceof King && (board[x + 1][y - 1].getColor() != this.color))) {
+                    res = board[x + 1][y - 1].getColor();
+                }
+            }
+            if (((x - 1) < 8) && ((y - 1) < 8) && ((x - 1) >= 0) && ((y - 1) >= 0)) {
+                if ((board[x - 1][y - 1] instanceof King && (board[x - 1][y - 1].getColor() != this.color))) {
+                    res = board[x - 1][y - 1].getColor();
+                }
+            }
+        }
+        return res;
+
+    }
+
     public int getPAWN_WHITE() {
         return PAWN_WHITE;
     }

@@ -30,10 +30,10 @@ public class Bishop extends Piece {
         if ((Math.abs(x_next - x) == Math.abs(y_next - y))) {
             int x_temp = x_next - x;
             int y_temp = y_next - y;
-            res=1;
+            res = 1;
 
-            if(board[x_next][y_next] != null){
-                res=2;
+            if (board[x_next][y_next] != null) {
+                res = 2;
             }
 
             if ((x_temp > 0) && (y_temp > 0)) {
@@ -62,13 +62,58 @@ public class Bishop extends Piece {
                 }
             }
 
-
             if ((res == 2) && (board[x_next][y_next].getColor() == this.getColor())) {
                 res = -1;
             }
 
         }
 
+        return res;
+    }
+
+    @Override
+    public Piece.ColorP threatedKing(Piece[][] board) {
+        Piece.ColorP res = null;
+        boolean a = false, b = false, c = false, d = false;
+
+        for (int m = 1; m < 8; m++) {
+            // Top-right diagonal
+            if ((x + m < 8) && (y + m < 8) && !a) {
+                if (board[x + m][y + m] instanceof King && (board[x + m][y + m].getColor() != this.color)) {
+                    res = board[x + m][y + m].getColor();
+                }
+                if (board[x + m][y + m] != null) {
+                    a = true;
+                }
+            }
+            // Top-left diagonal
+            if ((x - m >= 0) && (y + m < 8) && !b) {
+                if (board[x - m][y + m] instanceof King && (board[x - m][y + m].getColor() != this.color)) {
+                    res = board[x - m][y + m].getColor();
+                }
+                if (board[x - m][y + m] != null) {
+                    b = true;
+                }
+            }
+            // Bottom-right diagonal
+            if ((x + m < 8) && (y - m >= 0) && !c) {
+                if (board[x + m][y - m] instanceof King && (board[x + m][y - m].getColor() != this.color)) {
+                    res = board[x + m][y - m].getColor();
+                }
+                if (board[x + m][y - m] != null) {
+                    c = true;
+                }
+            }
+            // Bottom-left diagonal
+            if ((x - m >= 0) && (y - m >= 0) && !d) {
+                if (board[x - m][y - m] instanceof King && (board[x - m][y - m].getColor() != this.color)) {
+                    res = board[x - m][y - m].getColor();
+                }
+                if (board[x - m][y - m] != null) {
+                    d = true;
+                }
+            }
+        }
         return res;
     }
 

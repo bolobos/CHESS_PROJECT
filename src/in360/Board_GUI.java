@@ -33,10 +33,10 @@ public class Board_GUI {
         // window.add(label);
 
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        window.setVisible(true);
 
         ChessBoardPanel boardPanel = new ChessBoardPanel(chess);
         window.add(boardPanel);
+        window.setVisible(true);
 
     }
 
@@ -55,6 +55,9 @@ public class Board_GUI {
         private boolean start = true;
         private boolean dragged = false;
         Piece.ColorP winner;
+        private Piece tempPrevious;
+        private int xPrevious;
+        private int yPrevious;
 
         private BufferedImage boardImage; // Store the chessboard image
 
@@ -115,6 +118,9 @@ public class Board_GUI {
                 @Override
                 public void mouseDragged(MouseEvent e) {
                     if (start == true) {
+                        tempPrevious = chess.chess_state[selected_piece.x][selected_piece.y];
+                        xPrevious = selected_piece.x;
+                        yPrevious = selected_piece.y;
                         chess.chess_state[selected_piece.x][selected_piece.y] = null;
                         dragged = true;
                         start = false;
@@ -150,23 +156,67 @@ public class Board_GUI {
                     int y = (int) ((e.getY() - 50) / 100);
 
                     if (selected_piece != null) {
-                        int valid = selected_piece.isValid(selected_piece, chess.chess_state, x, y);
+                        int valid = selected_piece.isValid(chess.chess_state, x, y);
 
                         if (selected_piece.color != chess.turn) {
                             valid = 0;
                         }
 
                         if (valid > 0) {
+
                             selected_piece.x = x;
                             selected_piece.y = y;
+
                             if (chess.turn == Piece.ColorP.BLACK) {
                                 chess.turn = Piece.ColorP.WHITE;
+
+                                if ((selected_piece instanceof Pawn) && (selected_piece.y == 7)) {
+                                    selected_piece = null;
+                                    selected_piece = new Queen(x, y, Piece.ColorP.BLACK, true);
+                                }
                             } else {
                                 chess.turn = Piece.ColorP.BLACK;
+
+                                if ((selected_piece instanceof Pawn) && (selected_piece.y == 0)) {
+                                    selected_piece = null;
+                                    selected_piece = new Queen(x, y, Piece.ColorP.WHITE, true);
+                                }
                             }
+
                         }
 
+                        Piece temp = chess.chess_state[selected_piece.x][selected_piece.y];
                         chess.chess_state[selected_piece.x][selected_piece.y] = selected_piece;
+
+                        // Couleur du roi menacé
+                        Piece.ColorP whoChess = chess.isChess();
+                        if (whoChess == Piece.ColorP.BLACK) {
+                            if (chess.turn == Piece.ColorP.BLACK) {
+
+                            } else {
+                                chess.setChessBlack(true);
+                                chess.chess_state[selected_piece.x][selected_piece.y] = temp;
+                                chess.chess_state[xPrevious][yPrevious] = tempPrevious;
+                                chess.chess_state[xPrevious][yPrevious].x = xPrevious;
+                                chess.chess_state[xPrevious][yPrevious].y = yPrevious;
+                                chess.turn = Piece.ColorP.BLACK;
+                            }
+
+                        } else {
+                            chess.setChessBlack(false);
+                        }
+                        if (whoChess == Piece.ColorP.WHITE) {
+                            if (chess.turn == Piece.ColorP.WHITE) {
+
+                            } else {
+                                chess.setChessBlack(true);
+                                chess.chess_state[selected_piece.x][selected_piece.y] = temp;
+                                chess.chess_state[xPrevious][yPrevious] = tempPrevious;
+                                chess.turn = Piece.ColorP.WHITE;
+                            }
+                        } else {
+                            chess.setChessWhite(false);
+                        }
 
                         if (valid == 2) {
                             winner = chess.isEnd();
@@ -202,7 +252,7 @@ public class Board_GUI {
 
                     g.drawImage(boardImage, 0, 0, this);
 
-                    if (chess.turn == Piece.ColorP.BLACK){
+                    if (chess.turn == Piece.ColorP.BLACK) {
                         g.setColor(Color.BLACK);
                     } else {
                         g.setColor(Color.WHITE);

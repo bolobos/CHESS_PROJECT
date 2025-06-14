@@ -69,6 +69,52 @@ public class Rook extends Piece {
         return res;
     }
 
+    @Override
+    public Piece.ColorP threatedKing(Piece[][] board) {
+        Piece.ColorP res = null;
+        boolean a = false, b = false, c = false, d = false;
+
+        for (int m = 1; m < 8; m++) {
+            // Up
+            if ((y + m < 8) && !a) {
+                if (board[x][y + m] instanceof King && (board[x][y + m].getColor() != this.color)) {
+                    res = board[x][y + m].getColor();
+                }
+                if (board[x][y + m] != null) {
+                    a = true;
+                }
+            }
+            // Down
+            if ((y - m >= 0) && !b) {
+                if (board[x][y - m] instanceof King && (board[x][y - m].getColor() != this.color)) {
+                    res = board[x][y - m].getColor();
+                }
+                if (board[x][y - m] != null) {
+                    b = true;
+                }
+            }
+            // Right
+            if ((x + m < 8) && !c) {
+                if (board[x + m][y] instanceof King && (board[x + m][y].getColor() != this.color)) {
+                    res = board[x + m][y].getColor();
+                }
+                if (board[x + m][y] != null) {
+                    c = true;
+                }
+            }
+            // Left
+            if ((x - m >= 0) && !d) {
+                if (board[x - m][y] instanceof King && (board[x - m][y].getColor() != this.color)) {
+                    res = board[x - m][y].getColor();
+                }
+                if (board[x - m][y] != null) {
+                    d = true;
+                }
+            }
+        }
+        return res;
+    }
+
     public int getROOK_WHITE() {
         return ROOK_WHITE;
     }

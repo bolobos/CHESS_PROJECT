@@ -21,6 +21,8 @@ public class Piece {
     protected int piece_int;
     protected String image;
 
+    protected boolean isChess = false;
+
     protected BufferedImage pieceImage;
 
     public int getX() {
@@ -55,33 +57,61 @@ public class Piece {
         this.piece_int = piece_int;
     }
 
-    public int isValid(Piece selected_piece, Piece[][] arrayCol, int x_next, int y_next) {
+    // maybe rename isVlid with a more general form actionSpecificPiece
+    public int isValid(Piece[][] arrayCol, int x_next, int y_next) {
         int res = -1;
 
         if (((x_next == x) && (y_next == y)) || (x_next > 7) || (y_next > 7)) {
         } else {
-            if (selected_piece instanceof King) {
-                res = ((King) selected_piece).isValidMove(x_next, y_next, arrayCol);
-            } else if (selected_piece instanceof Queen) {
-                res = ((Queen) selected_piece).isValidMove(x_next, y_next, arrayCol);
-            } else if (selected_piece instanceof Rook) {
-                res = ((Rook) selected_piece).isValidMove(x_next, y_next, arrayCol);
-            } else if (selected_piece instanceof Bishop) {
-                res = ((Bishop) selected_piece).isValidMove(x_next, y_next, arrayCol);
-            } else if (selected_piece instanceof Knight) {
-                res = ((Knight) selected_piece).isValidMove(x_next, y_next, arrayCol);
-            } else if (selected_piece instanceof Pawn) {
-                res = ((Pawn) selected_piece).isValidMove(x_next, y_next, arrayCol);
+            if (this instanceof King) {
+                res = ((King) this).isValidMove(x_next, y_next, arrayCol);
+            } else if (this instanceof Queen) {
+                res = ((Queen) this).isValidMove(x_next, y_next, arrayCol);
+            } else if (this instanceof Rook) {
+                res = ((Rook) this).isValidMove(x_next, y_next, arrayCol);
+            } else if (this instanceof Bishop) {
+                res = ((Bishop) this).isValidMove(x_next, y_next, arrayCol);
+            } else if (this instanceof Knight) {
+                res = ((Knight) this).isValidMove(x_next, y_next, arrayCol);
+            } else if (this instanceof Pawn) {
+                res = ((Pawn) this).isValidMove(x_next, y_next, arrayCol);
             } else {
                 System.out.println("Type de pièce inconnu.");
             }
         }
         return res;
+
     }
 
     public int isValidMove(int x_next, int y_next, Piece[][] board) {
 
         return -1;
+    }
+
+    public Piece.ColorP isThreatedKing(Piece[][] board) {
+
+        Piece.ColorP res = null;
+        
+        if (this instanceof Queen) {
+            res = ((Queen) this).threatedKing(board);
+        } else if (this instanceof Rook) {
+            res = ((Rook) this).threatedKing(board);
+        } else if (this instanceof Bishop) {
+            res = ((Bishop) this).threatedKing(board);
+        } else if (this instanceof Knight) {
+            res = ((Knight) this).threatedKing(board);
+        } else if (this instanceof Pawn) {
+            res = ((Pawn) this).threatedKing(board);
+        } else if (this instanceof King) {
+            res = ((King) this).threatedKing(board);
+        } else {
+            System.out.println("Type de pièce inconnu.");
+        }
+        return res;
+    }
+
+    public Piece.ColorP threatedKing(Piece[][] board) {
+        return null;
     }
 
     public String getImage() {
