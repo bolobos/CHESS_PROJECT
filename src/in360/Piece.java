@@ -7,6 +7,7 @@ import in360.pieces.Knight;
 import in360.pieces.Pawn;
 import in360.pieces.Queen;
 import in360.pieces.Rook;
+import in360.pieces.Lion;
 
 public class Piece {
 
@@ -23,7 +24,7 @@ public class Piece {
 
     protected boolean isChess = false;
 
-    protected BufferedImage pieceImage;
+    protected transient BufferedImage pieceImage;
 
     public int getX() {
         return x;
@@ -75,6 +76,8 @@ public class Piece {
                 res = ((Knight) this).isValidMove(x_next, y_next, arrayCol);
             } else if (this instanceof Pawn) {
                 res = ((Pawn) this).isValidMove(x_next, y_next, arrayCol);
+            } else if (this instanceof Lion) {
+                res = ((Lion) this).isValidMove(x_next, y_next, arrayCol);
             } else {
                 System.out.println("Type de pièce inconnu.");
             }
@@ -91,7 +94,7 @@ public class Piece {
     public Piece.ColorP isThreatedKing(Piece[][] board) {
 
         Piece.ColorP res = null;
-        
+
         if (this instanceof Queen) {
             res = ((Queen) this).threatedKing(board);
         } else if (this instanceof Rook) {
@@ -104,6 +107,8 @@ public class Piece {
             res = ((Pawn) this).threatedKing(board);
         } else if (this instanceof King) {
             res = ((King) this).threatedKing(board);
+        } else if (this instanceof Lion) {
+            res = ((Lion) this).threatedKing(board);
         } else {
             System.out.println("Type de pièce inconnu.");
         }

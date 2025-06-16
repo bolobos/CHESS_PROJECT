@@ -1,20 +1,15 @@
 package in360;
 
-import in360.Chess.states;
 import in360.Piece.ColorP;
 import in360.pieces.*;
-
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import java.awt.event.MouseEvent;
-
 import java.awt.image.BufferedImage;
-
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -44,10 +39,6 @@ public class Board_GUI {
     class ChessBoardPanel extends JPanel {
 
         Chess chess;
-
-        private int x_prev;
-        private int y_prev;
-
         private int x_next;
         private int y_next;
 
@@ -58,25 +49,17 @@ public class Board_GUI {
         private Piece tempPrevious;
         private int xPrevious;
         private int yPrevious;
+        Chess.states state_game;
 
         private BufferedImage boardImage; // Store the chessboard image
 
         private BufferedImage tempImage;
 
         public ChessBoardPanel(Chess chess) {
+
+            // Get the chess object where 
             this.chess = chess;
-
-            // Initalize the mouse listener / with mouse adaptater, we only need to override
-            // the method we need
-            // addMouseListener(new java.awt.event.MouseAdapter() {
-            // @Override
-            // public void mouseClicked(MouseEvent e) {
-            // ChessBoardPanel.this.x_prev = e.getX();
-            // ChessBoardPanel.this.y_prev = e.getY();
-            // repaint();
-            // }
-
-            // });
+            this.state_game = Chess.states.GAME;
 
             boardImage = new BufferedImage(900, 900, BufferedImage.TYPE_INT_ARGB);
             Graphics gBoard = boardImage.getGraphics();
@@ -191,10 +174,11 @@ public class Board_GUI {
                         // Couleur du roi menacé
                         Piece.ColorP whoChess = chess.isChess();
                         if (whoChess == Piece.ColorP.BLACK) {
+                            chess.setChessBlack(true);
                             if (chess.turn == Piece.ColorP.BLACK) {
 
                             } else {
-                                chess.setChessBlack(true);
+                                
                                 chess.chess_state[selected_piece.x][selected_piece.y] = temp;
                                 chess.chess_state[xPrevious][yPrevious] = tempPrevious;
                                 chess.chess_state[xPrevious][yPrevious].x = xPrevious;
@@ -206,10 +190,11 @@ public class Board_GUI {
                             chess.setChessBlack(false);
                         }
                         if (whoChess == Piece.ColorP.WHITE) {
+                            chess.setChessBlack(true);
                             if (chess.turn == Piece.ColorP.WHITE) {
 
                             } else {
-                                chess.setChessBlack(true);
+                                
                                 chess.chess_state[selected_piece.x][selected_piece.y] = temp;
                                 chess.chess_state[xPrevious][yPrevious] = tempPrevious;
                                 chess.turn = Piece.ColorP.WHITE;
@@ -217,12 +202,11 @@ public class Board_GUI {
                         } else {
                             chess.setChessWhite(false);
                         }
-
-                        if (valid == 2) {
-                            winner = chess.isEnd();
-                            if (winner != null) {
-                                chess.state_game = Chess.states.END;
-                            }
+                    }
+                    if ((chess.chessBlack || chess.chessWhite) == true) {
+                        winner = chess.isEnd();
+                        if (winner != null) {
+                            state_game = Chess.states.END;
                         }
                     }
 
@@ -241,8 +225,6 @@ public class Board_GUI {
             // call the original paintComponent method, specific to JavaSwing, "reset the
             // backgroud"
             super.paintComponent(g);
-
-            states state_game = chess.state_game;
 
             switch (state_game) {
                 case Chess.states.INIT:
@@ -288,10 +270,10 @@ public class Board_GUI {
                     g.setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 32)); // Choose your font and size
                     g.drawString("The winner are ", 100, 50); // (x, y) position on the panel
                     if (winner == ColorP.BLACK) {
-                        g.drawString("the blacks ! ", 400, 50);
+                        g.drawString("the whites ! ", 400, 50);
                     }
                     if (winner == ColorP.WHITE) {
-                        g.drawString("the whites ! ", 400, 50);
+                        g.drawString("the blacks ! ", 400, 50);
                     }
                     break;
 

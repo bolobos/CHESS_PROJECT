@@ -16,6 +16,8 @@ public class Chess {
 
 	protected states state_game;
 
+	protected Piece.ColorP winner = null;
+
 	protected Piece.ColorP turn;
 
 	protected boolean chessBlack = false;
@@ -55,6 +57,7 @@ public class Chess {
 
 			if (i == 1) {
 				color = Piece.ColorP.WHITE;
+			} else {
 			}
 
 			chess_state[0][7 * i] = new Rook(0, 7 * i, color);
@@ -70,6 +73,9 @@ public class Chess {
 				chess_state[j][1 + 5 * i] = new Pawn(j, 1 + 5 * i, color);
 			}
 		}
+
+		Lion lion = new Lion("lion.json");
+		chess_state[lion.x][lion.y] = lion;
 
 		for (int row = 7; row >= 0; row--) {
 			System.out.print((row + 1) + "|");
@@ -101,32 +107,45 @@ public class Chess {
 		return new String(Character.toChars(piece));
 	}
 
+	// Fonction testant toutes les déplacements de pièce en regardant : 
+	//	- Si le déplacement est valide
+	//	- Si le jeu dest encore en situation d'échec
 	public Piece.ColorP isEnd() {
-		Piece.ColorP winner = null;
-		boolean blackWin = true;
-		boolean whiteWin = true;
+		Piece.ColorP current = turn;
+
 		for (int i = 0; i < 8; i++) {
 			for (int j = 0; j < 8; j++) {
-				if (chess_state[i][j] != null) {
-					if (chess_state[i][j].color == Piece.ColorP.BLACK) {
-						whiteWin = false;
-					}
-					if (chess_state[i][j].color == Piece.ColorP.WHITE) {
-						blackWin = false;
+				Piece piece = chess_state[i][j];
+				if (piece != null && piece.color == current) {
+					// Parcourt tous les mouvements possibles de la pièce
+					for (int x = 0; x < 8; x++) {
+						for (int y = 0; y < 8; y++) {
+							if (piece.isValid(chess_state, x, y) > 0) {
+								// Sauvegarde l'état actuel
+								Piece temp = chess_state[x][y];
+								chess_state[x][y] = piece;
+								chess_state[i][j] = null;
+								// Vérifie si le roi n'est plus en échec après ce coup
+								if (this.isChess() != current) {
+									// Annule le coup
+									chess_state[i][j] = piece;
+									chess_state[x][y] = temp;
+									return null; // Il existe au moins un coup pour sortir d'échec
+								}
+								// Annule le coup
+								chess_state[i][j] = piece;
+								chess_state[x][y] = temp;
+							}
+						}
 					}
 				}
 			}
 		}
-		if (blackWin) {
-			winner = Piece.ColorP.BLACK;
-		}
-		if (whiteWin) {
-			winner = Piece.ColorP.WHITE;
-		}
-
-		return winner;
+		// Aucun coup ne permet de sortir d'échec : le joueur courant a perdu
+		return current;
 	}
 
+	// Function to know if the king is in situation of chess
 	public Piece.ColorP isChess() {
 
 		Piece.ColorP res = null;
@@ -145,14 +164,7 @@ public class Chess {
 		return res;
 	}
 
-	public Piece.ColorP isChess(Piece selected_piece) {
-		Piece.ColorP res = null;
-
-		for (int i = 0; i < 7; i++) {
-
-		}
-		return res;
-	}
+	// GETTERS AND SETTERS
 
 	public states getState_game() {
 		return state_game;
@@ -178,4 +190,37 @@ public class Chess {
 		this.chessWhite = chessWhite;
 	}
 
+	public Piece[][] getChess_state() {
+		return chess_state;
+	}
+
+	public void setChess_state(Piece[][] chess_state) {
+		this.chess_state = chess_state;
+	}
+
+	public Board_GUI getBoard() {
+		return board;
+	}
+
+	public void setBoard(Board_GUI board) {
+		this.board = board;
+	}
+
+	public Piece.ColorP getWinner() {
+		return winner;
+	}
+
+	public void setWinner(Piece.ColorP winner) {
+		this.winner = winner;
+	}
+
+	public Piece.ColorP getTurn() {
+		return turn;
+	}
+
+	public void setTurn(Piece.ColorP turn) {
+		this.turn = turn;
+	}
+
+	
 }
