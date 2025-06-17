@@ -1,0 +1,241 @@
+@startuml
+left to right direction
+scale 1920x1080
+
+' ENUMS
+enum ColorP {
+  WHITE
+  BLACK
+}
+
+enum states {
+  INIT
+  GAME
+  END
+}
+
+' CLASSES
+class Piece {
+  - int x
+  - int y
+  - ColorP color
+  - int piece_int
+  - String image
+  - boolean isChess
+  - pieceImage
+  + getX()
+  + setX()
+  + getY()
+  + setY()
+  + getColor()
+  + setColor()
+  + getPiece_int()
+  + setPiece_int()
+  + isValid()
+  + isValidMove()
+  + isThreatedKing()
+  + threatedKing()
+  + getImage()
+  + setImage()
+}
+
+class King {
+  - int KING_WHITE
+  - int KING_BLACK
+  - boolean hasAlreadyMoved
+  + King()
+  + isValidMove()
+  + isHasAlreadyMoved()
+  + setHasAlreadyMoved()
+  + getKING_WHITE()
+  + getKING_BLACK()
+}
+
+class Queen {
+  - int QUEEN_WHITE
+  - int QUEEN_BLACK
+  + Queen()
+  + Queen()
+  + isValidMove()
+  + threatedKing()
+  + getQUEEN_WHITE()
+  + getQUEEN_BLACK()
+}
+
+class Rook {
+  - int ROOK_WHITE
+  - int ROOK_BLACK
+  - boolean hasAlreadyMoved
+  + Rook()
+  + Rook()
+  + isValidMove()
+  + threatedKing()
+  + isHasAlreadyMoved()
+  + setHasAlreadyMoved()
+  + getROOK_WHITE()
+  + getROOK_BLACK()
+}
+
+class Bishop {
+  - int BISHOP_WHITE
+  - int BISHOP_BLACK
+  + Bishop()
+  + isValidMove()
+  + threatedKing()
+  + getBISHOP_WHITE()
+  + getBISHOP_BLACK()
+}
+
+class Knight {
+  - int KNIGHT_WHITE
+  - int KNIGHT_BLACK
+  + Knight()
+  + isValidMove()
+  + threatedKing()
+  + getKNIGHT_WHITE()
+  + getKNIGHT_BLACK()
+}
+
+class Pawn {
+  - int PAWN_WHITE
+  - int PAWN_BLACK
+  - int turn
+  - int move2cases
+  + Pawn()
+  + isValidMove()
+  + threatedKing()
+  + getPAWN_WHITE()
+  + getPAWN_BLACK()
+  + getTurn()
+  + setTurn()
+  + getMove2cases()
+  + setMove2cases()
+}
+
+class Lion {
+  - int LION_WHITE
+  - int LION_BLACK
+  - List<Move> availableMoves
+  + Lion(String)
+  + isValidMove()
+  + threatedKing()
+  + getAvailableMoves()
+}
+
+class "Lion$Move" as LionMove {
+  + int dx
+  + int dy
+  + boolean isCapture
+  + Move(int, int, boolean)
+}
+
+class Chess {
+  - Piece[][] chess_state
+  - Piece[][] initGame
+  - Board_GUI board
+  - states state_game
+  - int nTour
+  - ColorP winner
+  - ColorP turn
+  - boolean chessBlack
+  - boolean chessWhite
+  + getnTour()
+  + setnTour()
+  + main()
+  + getState_game()
+  + setState_game()
+  + isChessBlack()
+  + setChessBlack()
+  + isChessWhite()
+  + setChessWhite()
+  + getChess_state()
+  + setChess_state()
+  + getBoard()
+  + setBoard()
+  + getWinner()
+  + setWinner()
+  + getTurn()
+  + setTurn()
+  - execute()
+  - graphic()
+  - empty()
+  - show()
+  + isEnd()
+  + effectiveMove()
+  + isChess()
+}
+
+class Board_GUI {
+  + Board_GUI()
+  + restartCode()
+}
+
+class ChessBoardPanel {
+  - Chess chess
+  - int x_next
+  - int y_next
+  - Piece selected_piece
+  - boolean start
+  - boolean dragged
+  - ColorP winner
+  - Piece tempPrevious
+  - int xPrevious
+  - int yPrevious
+  - states state_game
+  - BufferedImage boardImage
+  - BufferedImage tempImage
+  - JButton demoButton
+  - JButton restartButton
+  + ChessBoardPanel()
+  # paintComponent()
+  + handleMouseRelease()
+  + demoCode()
+}
+
+' RELATIONS
+
+' Héritage des pièces
+Piece <|-- King
+Piece <|-- Queen
+Piece <|-- Rook
+Piece <|-- Bishop
+Piece <|-- Knight
+Piece <|-- Pawn
+Piece <|-- Lion
+
+' Nested classes
+Lion +-- LionMove
+
+' Composition/agrégation
+Chess "1" o-- "1" Board_GUI : board
+Chess "1" o-- "8x8" Piece : chess_state
+Chess "1" o-- "8x8" Piece : initGame
+Board_GUI "1" *-- "1" ChessBoardPanel
+Lion "1" o-- "*" LionMove : availableMoves
+
+' Utilisation des enums
+Piece ..> ColorP
+Chess ..> ColorP
+Chess ..> states
+ChessBoardPanel ..> states
+
+' Dépendances entre classes
+Board_GUI ..> Chess
+ChessBoardPanel ..> Chess
+ChessBoardPanel ..> Piece
+
+' Dépendances entre pièces (pour les méthodes)
+Queen ..> Bishop : utilise mouvements
+Queen ..> Rook : utilise mouvements
+King ..> Rook : utilise pour le roque
+Pawn ..> Pawn : utilise pour en passant
+Rook ..> King : utilise pour le roque
+Bishop ..> King : menace
+Knight ..> King : menace
+Pawn ..> King : menace
+Lion ..> King : menace
+
+' Accès direct aux champs (note UML)
+ChessBoardPanel ..> Piece : accès direct à x, y, color (ex: selected_piece.x)
+
+@enduml

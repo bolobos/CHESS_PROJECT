@@ -1,0 +1,105 @@
+{
+  "pieceName": "Lion",
+  "x": 2,
+  "y": 0,
+  "color": "BLACK",
+  "availableMoves": [
+    {
+      "dx": 0,
+      "dy": 2,
+      "isCapture": false,
+      "isJump": false
+    },
+    {
+      "dx": 0,
+      "dy": -2,
+      "isCapture": false,
+      "isJump": false
+    },
+    {
+      "dx": 2,
+      "dy": 0,
+      "isCapture": false,
+      "isJump": false
+    },
+    {
+      "dx": -2,
+      "dy": 0,
+      "isCapture": false,
+      "isJump": false
+    },
+    {
+      "dx": 2,
+      "dy": 2,
+      "isCapture": false,
+      "isJump": false
+    },
+    {
+      "dx": 2,
+      "dy": -2,
+      "isCapture": false,
+      "isJump": false
+    },
+    {
+      "dx": -2,
+      "dy": 2,
+      "isCapture": false,
+      "isJump": false
+    },
+    {
+      "dx": -2,
+      "dy": -2,
+      "isCapture": false,
+      "isJump": false
+    },
+    
+    {
+      "dx": 0,
+      "dy": 1,
+      "isCapture": true,
+      "isJump": false
+    },
+    {
+      "dx": 0,
+      "dy": -1,
+      "isCapture": true,
+      "isJump": false
+    },
+    {
+      "dx": 1,
+      "dy": 0,
+      "isCapture": true,
+      "isJump": false
+    },
+    {
+      "dx": -1,
+      "dy": 0,
+      "isCapture": true,
+      "isJump": false
+    },
+    {
+      "dx": 1,
+      "dy": 1,
+      "isCapture": true,
+      "isJump": false
+    },
+    {
+      "dx": 1,
+      "dy": -1,
+      "isCapture": true, 
+      "isJump": false
+    },
+    {
+      "dx": -1,
+      "dy": 1,
+      "isCapture": true,
+      "isJump": false
+    },
+    {
+      "dx": -1,
+      "dy": -1,
+      "isCapture": true,
+      "isJump": false
+    }
+  ]
+}
